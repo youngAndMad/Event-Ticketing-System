@@ -22,31 +22,4 @@ public class EventServiceApplication {
     }
 
 
-    static final String topicExchangeName = "spring-boot-exchange";
-
-    static final String queueName = "spring-boot";
-
-    @Bean
-    Queue queue() {
-        return new Queue(queueName, true);
-    }
-
-    @Bean
-    TopicExchange exchange() {
-        return new TopicExchange(topicExchangeName);
-    }
-
-    @Bean
-    Binding binding(Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with("foo.bar.#");
-    }
-
-    @Bean
-    public CommandLineRunner runner(
-            RabbitTemplate rabbitTemplate
-    ){
-        return args -> {
-            rabbitTemplate.convertAndSend(topicExchangeName, "foo.bar.baz", "hello world");
-        };
-    }
 }

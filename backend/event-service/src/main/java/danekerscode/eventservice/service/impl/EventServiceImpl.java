@@ -9,6 +9,8 @@ import danekerscode.eventservice.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
@@ -31,6 +33,11 @@ public class EventServiceImpl implements EventService {
     @Override
     public void delete(Long id) {
         eventRepository.delete(this.findById(id));
+    }
+
+    @Override
+    public List<Event> findAll() {
+        return eventRepository.findAll();
     }
 
 
