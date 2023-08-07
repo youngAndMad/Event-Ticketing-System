@@ -3,6 +3,10 @@ server:
 #  servlet:
 #    context-path: /api/v1/
 spring:
+  rabbit:
+    host: localhost
+    username: user
+    password: password
   security:
     oauth2:
       resourceserver:

@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: notification-service
+  rabbit:
+    host: localhost
+    username: user
+    password: password
+server:
+  port: 8118
