@@ -11,6 +11,7 @@ java {
     sourceCompatibility = '17'
 }
 
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -20,7 +21,6 @@ configurations {
 repositories {
     mavenCentral()
 }
-
 ext {
     set('springCloudVersion', "2022.0.1")
 }
@@ -31,8 +31,9 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
-    implementation 'org.elasticsearch.cleint:elasticsearch-rest-high-level-client'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+    implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.17.12'
 
     runtimeOnly 'org.postgresql:postgresql'
 

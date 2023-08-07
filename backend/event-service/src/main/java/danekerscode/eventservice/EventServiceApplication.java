@@ -14,12 +14,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
-@RestController
 public class EventServiceApplication {
+
 
     public static void main(String[] args) {
         SpringApplication.run(EventServiceApplication.class, args);
     }
 
+
+    @Bean
+    public CommandLineRunner lineRunner(
+            ELK elk
+    ) {
+        return args -> {
+            elk.run();
+        };
+    }
 
 }
