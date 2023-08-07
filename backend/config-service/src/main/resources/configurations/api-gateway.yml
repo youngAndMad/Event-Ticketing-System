@@ -1,6 +1,5 @@
 server:
   port: 8090
-
 spring:
   application:
     name: api-gateway
@@ -29,6 +28,8 @@ spring:
           uri: http://localhost:8082
           predicates:
             - Path=/api/v1/event/**
+          filters:
+            - TokenRelay=
 management:
   tracing:
     sampling:
