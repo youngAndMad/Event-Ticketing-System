@@ -1,4 +1,4 @@
-package danekerscode.eventservice;
+package danekerscode.eventservice.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -32,17 +32,6 @@ public class ELK implements Runnable {
 
     @Override
     public void run() {
-//        var articles = generateArticles(100);
-//        articles.stream().map(this::createIndexRequest)
-//                .forEach(articleIndex -> {
-//                            try {
-//                                var res = elastic.index(articleIndex, RequestOptions.DEFAULT);
-//                                System.out.println(res);
-//                            } catch (IOException e) {
-//                                System.err.println(e.getMessage());
-//                            }
-//                        }
-//                );
         trySearch();
 
     }
