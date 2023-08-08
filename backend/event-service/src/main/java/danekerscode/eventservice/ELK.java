@@ -89,44 +89,4 @@ public class ELK implements Runnable {
     ) {
     }
 
-    static List<Article> generateArticles(int count) {
-        List<Article> articles = new ArrayList<>();
-        Random random = new Random();
-
-        String[] possibleTitles = {
-                "The Art of Programming",
-                "Exploring Java Generics",
-                "Introduction to Machine Learning",
-                "Cooking Delicious Meals",
-                "Traveling on a Budget",
-                "Effective Time Management",
-                "Understanding Quantum Computing",
-                "Fitness and Health",
-                "Nature Photography",
-                "Financial Planning",
-        };
-
-        String[] possibleDescriptions = {
-                "Learn the best practices of programming.",
-                "Master the concepts of Java generics and type erasure.",
-                "Dive into the world of machine learning with hands-on examples.",
-                "Discover mouth-watering recipes to impress your guests.",
-                "Explore exciting travel destinations without breaking the bank.",
-                "Optimize your productivity with time management techniques.",
-                "Unravel the mysteries of quantum computing and its potential applications.",
-                "Stay fit and healthy with expert tips and workout routines.",
-                "Capture the beauty of nature through photography and visual storytelling.",
-                "Plan your financial future wisely with expert financial advice.",
-        };
-
-        for (int i = 0; i < count; i++) {
-            String title = possibleTitles[random.nextInt(possibleTitles.length)];
-            String description = possibleDescriptions[random.nextInt(possibleDescriptions.length)];
-
-            Article article = new Article(title, description);
-            articles.add(article);
-        }
-
-        return articles;
-    }
 }
