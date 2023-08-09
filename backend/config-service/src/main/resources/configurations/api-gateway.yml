@@ -10,7 +10,7 @@ spring:
           gateway:
             provider: my-provider
             client-id: my_client
-            client-secret: Nxzj03SLu3lSBZ66Q48Q8LP4Vp8Ukm6V
+            client-secret: EIF3Jhl2zSAFR8AyPUY9g0N9pH51iNSV
             authorization-grant-type: authorization_code
             redirect-uri: http://localhost:8090/login/oauth2/code/{registrationId}
             scope:

@@ -1,6 +1,8 @@
 package danekerscode.eventservice.controller;
 
 import danekerscode.eventservice.dto.EventDTO;
+import danekerscode.eventservice.dto.EventSearchRequest;
+import danekerscode.eventservice.service.EventElasticService;
 import danekerscode.eventservice.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import static org.springframework.http.HttpStatus.*;
 public class EventController {
 
     private final EventService eventService;
+    private final EventElasticService elastic;
 
     @PostMapping
     ResponseEntity<?> save(
@@ -26,7 +29,7 @@ public class EventController {
     @GetMapping("{id}")
     ResponseEntity<?> get(
             @PathVariable Long id
-    ){
+    ) {
         return ResponseEntity
                 .ok(eventService.findById(id));
     }
@@ -35,8 +38,18 @@ public class EventController {
     @ResponseStatus(NO_CONTENT)
     void delete(
             @PathVariable Long id
-    ){
+    ) {
         eventService.delete(id);
+    }
+
+    @PutMapping
+    ResponseEntity<?> search(
+            @RequestParam(value = "from" , required = false , defaultValue = "0") int from,
+            @RequestParam(value = "to" , required = false , defaultValue = "10") int to,
+            @RequestBody EventSearchRequest params
+    ) {
+        return ResponseEntity
+                .ok(elastic.search(params, from, to));
     }
 
 }

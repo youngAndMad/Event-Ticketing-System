@@ -1,8 +1,13 @@
 server:
   port: 8082
-#  servlet:
-#    context-path: /api/v1/
+  servlet:
+    context-path: /api/v1/
 spring:
+  data:
+    elasticsearch:
+      schema: http
+      host: localhost
+      port: 9200
   rabbit:
     host: localhost
     username: user
