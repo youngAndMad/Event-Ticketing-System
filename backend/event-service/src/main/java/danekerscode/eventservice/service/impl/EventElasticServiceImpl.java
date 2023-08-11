@@ -48,18 +48,18 @@ public class EventElasticServiceImpl implements EventElasticService {
 
         var boolQueryBuilder = QueryBuilders.boolQuery();
 
-        if (eventSearchRequest.country()!=null){
-            boolQueryBuilder.must(QueryBuilders.matchQuery("country" , eventSearchRequest.country()));
+        if (eventSearchRequest.country() != null) {
+            boolQueryBuilder.must(QueryBuilders.matchQuery("country", eventSearchRequest.country()));
         }
 
-        if (eventSearchRequest.city()!=null){
-            boolQueryBuilder.must(QueryBuilders.matchQuery("city" , eventSearchRequest.city()));
+        if (eventSearchRequest.city() != null) {
+            boolQueryBuilder.must(QueryBuilders.matchQuery("city", eventSearchRequest.city()));
         }
 
         if (eventSearchRequest.text() != null) {
             boolQueryBuilder.must(QueryBuilders.boolQuery()
-                    .should(QueryBuilders.matchQuery("title", eventSearchRequest.text()))
-                    .should(QueryBuilders.matchQuery("description", eventSearchRequest.text())));
+                    .should(QueryBuilders.matchQuery("title", "*" + eventSearchRequest.text() + "*"))
+                    .should(QueryBuilders.matchQuery("description",  "*"+eventSearchRequest.text() + "*")));
         }
 
         if (eventSearchRequest.text() != null) {
@@ -81,8 +81,8 @@ public class EventElasticServiceImpl implements EventElasticService {
     @Override
     public void addIndex(Event event) {
         var req = createIndexRequest(eventMapper.toIndex(event));
-        var res =  elastic.index(req, DEFAULT);
-        log.info("add index result info id: {}, {}" , event.getId() , res.getResult().name());
+        var res = elastic.index(req, DEFAULT);
+        log.info("add index result info id: {}, {}", event.getId(), res.getResult().name());
     }
 
     @SneakyThrows

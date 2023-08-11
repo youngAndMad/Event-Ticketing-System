@@ -1,11 +1,16 @@
 package danekerscode.mapper;
 
-import danekerscode.dto.UserRegistrationDTO;
+import danekerscode.dto.UserDTO;
 import danekerscode.model.User;
-import org.mapstruct.Mapper;
+import org.mapstruct.*;
 
-@Mapper
+@Mapper(
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
+)
 public interface UserMapper {
 
-    User toModel(UserRegistrationDTO dto);
+    User toModel(UserDTO dto);
+
+    User update(UserDTO dto , @MappingTarget User user);
 }

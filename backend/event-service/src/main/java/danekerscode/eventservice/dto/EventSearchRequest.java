@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public record EventSearchRequest(
         String text,
-        LocalDateTime time,
+        LocalDate time,
         EventType type,
         String country,
         String city
