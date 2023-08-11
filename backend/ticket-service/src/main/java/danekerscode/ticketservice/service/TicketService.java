@@ -10,4 +10,6 @@ public interface TicketService {
 
     Ticket boughtTicket(Long userId , Long eventId);
 
+    boolean returnTicket(Long id);
+
 }

@@ -17,18 +17,5 @@ public class TicketServiceApplication {
         SpringApplication.run(TicketServiceApplication.class, args);
     }
 
-    @Bean
-    public CommandLineRunner r(
-            UserClient client
-    ){
-        return args -> {
-            try {
-                System.out.println(client.findById(1L));
-            }catch (FeignException.Unauthorized e){
-                System.out.println(e.getMessage());
-            }
-        };
-    }
-
 
 }
