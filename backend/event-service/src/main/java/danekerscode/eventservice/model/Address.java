@@ -12,11 +12,10 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Mangilik el 64a/4
-    private String country; // Kazakhstan
-    private String city; // Astana
-    private String street; // Mangilik el
-    private String mark;// 64a/4
-    private String buildingName; // live house
+    private String country;
+    private String city;
+    private String street;
+    private String mark;
+    private String buildingName;
 
 }

@@ -3,21 +3,6 @@ server:
 spring:
   application:
     name: api-gateway
-  security:
-    oauth2:
-      client:
-        registration:
-          gateway:
-            provider: my-provider
-            client-id: my_client
-            client-secret: EIF3Jhl2zSAFR8AyPUY9g0N9pH51iNSV
-            authorization-grant-type: authorization_code
-            redirect-uri: http://localhost:8090/login/oauth2/code/{registrationId}
-            scope:
-              - openid
-        provider:
-          my-provider:
-            issuer-uri: http://localhost:8080/auth/realms/event_ticket_system
   cloud:
     gateway:
       discovery:

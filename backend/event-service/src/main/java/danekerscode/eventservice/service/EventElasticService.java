@@ -1,6 +1,5 @@
 package danekerscode.eventservice.service;
 
-import danekerscode.eventservice.dto.AddressSearchRequest;
 import danekerscode.eventservice.dto.EventSearchRequest;
 import danekerscode.eventservice.model.Event;
 

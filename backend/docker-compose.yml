@@ -1,29 +1,5 @@
 version: '3'
 services:
-  db:
-    image: postgres:13.5
-    environment:
-      POSTGRES_HOST_AUTH_METHOD: trust
-      POSTGRES_USER: my_admin
-      POSTGRES_PASSWORD: my_password
-      POSTGRES_DB: keycloak_db
-    ports:
-      - "5432:5432"
-  kc:
-    image: quay.io/keycloak/keycloak:legacy
-    environment:
-      DB_VENDOR: POSTGRES
-      DB_ADDR: db
-      DB_DATABASE: keycloak_db
-      DB_USER: my_admin
-      DB_SCHEMA: public
-      DB_PASSWORD: my_password
-      KEYCLOAK_USER: kc_admin
-      KEYCLOAK_PASSWORD: kc_password
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db
   rabbitmq:
     image: rabbitmq:3.10.7-management
     restart: always
@@ -34,20 +10,5 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
-#  kafka:
-#    container_name: kafka
-#    image: quay.io/strimzi/kafka:latest-kafka-2.8.1-amd64
-#    command:
-#      [
-#        "sh",
-#        "-c",
-#        "export CLUSTER_ID=$$(bin/kafka-storage.sh random-uuid) && bin/kafka-storage.sh format -t $$CLUSTER_ID -c config/kraft/server.properties && bin/kafka-server-start.sh config/kraft/server.properties --override advertised.listeners=$${KAFKA_ADVERTISED_LISTENERS} --override listener.security.protocol.map=$${KAFKA_LISTENER_SECURITY_PROTOCOL_MAP} --override listeners=$${KAFKA_LISTENERS}",
-#      ]
-#    ports:
-#      - "9092:9092"
-#    environment:
-#      LOG_DIR: "/tmp/logs"
-#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-#      KAFKA_LISTENERS: PLAINTEXT://:29092,PLAINTEXT_HOST://:9092,CONTROLLER://:9093
-#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+
 

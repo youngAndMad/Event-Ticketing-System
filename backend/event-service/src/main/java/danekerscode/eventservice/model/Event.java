@@ -1,22 +1,23 @@
 package danekerscode.eventservice.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import danekerscode.eventservice.enums.EventType;
-import danekerscode.eventservice.model.audit.DateAudit;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
 @Setter
-public class Event extends DateAudit {
+public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime time;
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private LocalDate time;
 
     @OneToOne
     @JoinColumn

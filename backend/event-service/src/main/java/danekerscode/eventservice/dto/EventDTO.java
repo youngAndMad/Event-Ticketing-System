@@ -2,10 +2,11 @@ package danekerscode.eventservice.dto;
 
 import danekerscode.eventservice.enums.EventType;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
 
 public record EventDTO(
-        LocalDateTime time,
+        LocalDate time,
         AddressDTO address,
         EventType type,
         String title,

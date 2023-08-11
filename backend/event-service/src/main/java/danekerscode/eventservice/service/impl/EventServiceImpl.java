@@ -5,6 +5,7 @@ import danekerscode.eventservice.exception.NotFoundException;
 import danekerscode.eventservice.mapper.EventMapper;
 import danekerscode.eventservice.model.Event;
 import danekerscode.eventservice.repository.EventRepository;
+import danekerscode.eventservice.service.AddressService;
 import danekerscode.eventservice.service.EventElasticService;
 import danekerscode.eventservice.service.EventService;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +19,16 @@ public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
+    private final AddressService addressService;
     private final EventElasticService elastic;
 
     @Override
     public Event save(EventDTO dto) {
         var event = eventMapper.toModel(dto);
+        addressService.save(event.getAddress());
+        eventRepository.save(event);
         elastic.addIndex(event);
-        return eventRepository
-                .save(event);
+        return event;
     }
 
     @Override

@@ -2,7 +2,6 @@ package danekerscode.eventservice.utils;
 
 public record Notification(
         String message,
-        String destination,
-        NotificationType type
+        String destination
 ) {
 }

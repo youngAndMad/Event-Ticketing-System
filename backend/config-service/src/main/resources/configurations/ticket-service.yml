@@ -1,33 +1,31 @@
 server:
-  port: 8082
+  port: 8083
   servlet:
     context-path: /api/v1/
+
 spring:
-  jackson:
-    date-format: "yyyy-MM-dd"
-    serialization:
-      write_dates_as_timestamps: false
-  data:
-    elasticsearch:
-      schema: http
-      host: localhost
-      port: 9200
-  rabbit:
-    host: localhost
-    username: user
-    password: password
+  cloud:
+    openfeign:
+      client:
+        config:
+          user:
+            url: http://localhost:8081/api/v1/user
+          event:
+            url: http://localhost:8082/api/v1/user
   application:
-    name: event-service
+    name: ticket-service
   datasource:
-    password: postgres
     username: postgres
-    url: jdbc:postgresql://localhost:5432/event_ticket_system_event_service
+    password: postgres
+    url: jdbc:postgresql://localhost:5432/event_ticket_system_ticket_service
     driver-class-name: org.postgresql.Driver
   jpa:
     open-in-view: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
+
+
 eureka:
   instance:
     hostname: localhost

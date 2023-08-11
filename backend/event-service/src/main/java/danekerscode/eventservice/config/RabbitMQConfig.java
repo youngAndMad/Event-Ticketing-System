@@ -1,7 +1,6 @@
 package danekerscode.eventservice.config;
 
 import danekerscode.eventservice.utils.Notification;
-import danekerscode.eventservice.utils.NotificationType;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -47,21 +46,7 @@ public class RabbitMQConfig {
         return template;
     }
 
-    @Bean
-    public CommandLineRunner runner(
-            @Qualifier("template") RabbitTemplate rabbitBroker
-    ) {
-        return args -> {
-            for (int i = 0; i < 100; i++) {
-                rabbitBroker.convertAndSend(EMAIL_EXCHANGE, EMAIL_ROUTING_KEY, new Notification(
-                        "test message: " + i,
-                        "test destination: " + i,
-                        NotificationType.EMAIL
-                ));
-                System.out.println("success: " + i);
-            }
-        };
-    }
+
 
 
 }

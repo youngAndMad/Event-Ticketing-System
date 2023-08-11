@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.function.BiFunction;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.*;
 
 @ControllerAdvice
 public class GlobalHandler {
@@ -16,7 +16,7 @@ public class GlobalHandler {
 
     @ExceptionHandler(NotFoundException.class)
     ProblemDetail handle(NotFoundException e) {
-        return this.withDetails.apply(e, BAD_REQUEST);
+        return this.withDetails.apply(e, NOT_FOUND);
     }
 
     private final BiFunction<RuntimeException, HttpStatus, ProblemDetail> withDetails =
