@@ -13,6 +13,7 @@ java {
 
 ext {
     set('springCloudVersion', "2022.0.1")
+    set('testcontainersVersion', "1.18.0")
 }
 
 configurations {
@@ -35,6 +36,14 @@ dependencies {
     testImplementation 'org.testng:testng:7.7.0'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
     testImplementation 'com.h2database:h2'
+    testImplementation "org.testcontainers:testcontainers:1.18.3"
+    testImplementation 'org.testcontainers:junit-jupiter'
+
+    implementation platform('org.testcontainers:testcontainers-bom:1.18.3')
+    testImplementation 'org.testcontainers:rabbitmq:1.18.3'
+//    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+
+
 
     runtimeOnly 'org.postgresql:postgresql'
 
@@ -46,11 +55,13 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-test'
 
+
 }
 
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
     }
 }
 

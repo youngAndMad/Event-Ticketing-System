@@ -2,10 +2,13 @@ package danekerscode.controller;
 
 import danekerscode.dto.UserDTO;
 import danekerscode.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import static danekerscode.utils.ReturnError.validateRequest;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
@@ -19,8 +22,10 @@ public class UserController {
 
     @PostMapping("/")
     ResponseEntity<?> save(
-            @RequestBody UserDTO dto
+            @RequestBody @Valid UserDTO dto,
+            BindingResult br
     ) {
+        validateRequest(br);
         return ResponseEntity
                 .status(201)
                 .body(userService.registration(dto));
@@ -34,7 +39,6 @@ public class UserController {
                 .ok(userService.findById(id));
     }
 
-    @ResponseStatus(OK)
     @RequestMapping(
             path = {"{id}", "{id}"},
             method = {PUT, PATCH}

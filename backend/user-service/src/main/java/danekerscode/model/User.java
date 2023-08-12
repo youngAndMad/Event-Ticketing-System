@@ -2,11 +2,13 @@ package danekerscode.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Getter
+@EqualsAndHashCode
 @Setter
 @Table(name = "users")
 public class User {
