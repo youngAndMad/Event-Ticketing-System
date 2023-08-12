@@ -1,6 +1,8 @@
 package danekerscode.ticketservice.service.impl;
 
 import danekerscode.ticketservice.client.EventClient;
+import danekerscode.ticketservice.client.UserClient;
+import danekerscode.ticketservice.exception.TicketComponentNotFoundException;
 import danekerscode.ticketservice.exception.TicketNotFoundException;
 import danekerscode.ticketservice.exception.TicketReturnDateExpiredException;
 import danekerscode.ticketservice.model.Ticket;
@@ -25,6 +27,7 @@ public class TicketServiceImpl implements TicketService {
 
     private final TicketRepository ticketRepository;
     private final EventClient eventClient;
+    private final UserClient userClient;
     private final RabbitTemplate rabbitTemplate;
 
     @Override
@@ -35,21 +38,18 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    @CircuitBreaker(name = "user_service_circuit_breaker", fallbackMethod = "onUserServiceError")
     public Ticket boughtTicket(Long userId, Long eventId) {
+        var checkUser = userClient.findById(userId);
         var ticket = new Ticket(eventId, userId);
 
-        rabbitTemplate.convertAndSend(
-                TICKET_EXCHANGE,
-                TICKET_ROUTING_KEY,
-                new TicketEvent(ticket.getCode(), STATUS_BOUGHT, userId)
-        );
-        log.info("ticked event was send userId: {} eventId: {}" , userId , eventId);
+        sendEvent(ticket, STATUS_BOUGHT);
 
         return ticketRepository.save(ticket);
     }
 
     @Override
-    @CircuitBreaker(name="event_service_circuit_breaker" , fallbackMethod = "onError")
+    @CircuitBreaker(name = "event_service_circuit_breaker", fallbackMethod = "onError")
     public boolean returnTicket(Long id) {
         var ticket = ticketRepository.findById(id)
                 .orElseThrow(TicketNotFoundException::new);
@@ -60,19 +60,28 @@ public class TicketServiceImpl implements TicketService {
             throw new TicketReturnDateExpiredException();
         }
 
-        rabbitTemplate.convertAndSend(
-                TICKET_EXCHANGE,
-                TICKET_ROUTING_KEY,
-                new TicketEvent(ticket.getCode(), STATUS_RETURNED, ticket.getEventId())
-        );
+        sendEvent(ticket, STATUS_RETURNED);
 
         ticketRepository.deleteById(id);
         return true;
     }
 
-    boolean onError(Long l,Throwable  e){
-        System.out.println(e.getMessage());
+    private void sendEvent(Ticket ticket, String status) {
+        log.info("ticked event was send userId: {} eventId: {} , status {}", ticket.getUserId(), ticket.getEventId(), status);
+        rabbitTemplate.convertAndSend(
+                TICKET_EXCHANGE,
+                TICKET_ROUTING_KEY,
+                new TicketEvent(ticket.getCode(), status, ticket.getEventId())
+        );
+    }
 
-        return false;
+    boolean onEventServiceError(Throwable e) {
+        log.error("error from event service: {}", e.getMessage());
+        throw new TicketComponentNotFoundException("event");
+    }
+
+    Ticket onUserServiceError(Throwable e) {
+        log.error("error from user service: {}", e.getMessage());
+        throw new TicketComponentNotFoundException("user");
     }
 }

@@ -41,7 +41,7 @@ public class MailConfig {
     private String enable;
 
 
-//    @Bean
+    @Bean
     public JavaMailSender getMailSender() {
 
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
