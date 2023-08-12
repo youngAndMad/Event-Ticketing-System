@@ -1,6 +1,7 @@
 package danekerscode.service.impl;
 
 import danekerscode.dto.UserDTO;
+import danekerscode.exception.EmailRegisteredYetException;
 import danekerscode.exception.UserNotFoundException;
 import danekerscode.mapper.UserMapper;
 import danekerscode.model.User;
@@ -35,12 +36,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User registration(UserDTO dto) {
+        var optional = userRepository.findUserByEmail(dto.email());
+
+        optional.ifPresent(_o -> {
+            throw new EmailRegisteredYetException();
+        });
+
         var user = userRepository.save(userMapper.toModel(dto));
         rabbitTemplate.convertAndSend(
                 EMAIL_EXCHANGE,
                 EMAIL_ROUTING_KEY,
                 new Notification("welcome to event ticket system", user.getEmail())
         );
+
         return user;
     }
 

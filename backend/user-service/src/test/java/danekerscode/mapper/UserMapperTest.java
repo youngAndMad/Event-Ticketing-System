@@ -33,6 +33,8 @@ class UserMapperTest {
         assertEquals(dto.email() , expectedMapped.getEmail());
         assertEquals(dto.password() , expectedMapped.getPassword());
 
+        assertNotNull(expectedMapped);
+
         assertNull(expectedMapped.getId());
     }
 
