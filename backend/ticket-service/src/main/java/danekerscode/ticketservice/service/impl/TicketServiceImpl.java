@@ -7,6 +7,7 @@ import danekerscode.ticketservice.model.Ticket;
 import danekerscode.ticketservice.repository.TicketRepository;
 import danekerscode.ticketservice.service.TicketService;
 import danekerscode.ticketservice.utils.TicketEvent;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -48,6 +49,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    @CircuitBreaker(name="event_service_circuit_breaker" , fallbackMethod = "onError")
     public boolean returnTicket(Long id) {
         var ticket = ticketRepository.findById(id)
                 .orElseThrow(TicketNotFoundException::new);
@@ -66,5 +68,11 @@ public class TicketServiceImpl implements TicketService {
 
         ticketRepository.deleteById(id);
         return true;
+    }
+
+    boolean onError(Long l,Throwable  e){
+        System.out.println(e.getMessage());
+
+        return false;
     }
 }
