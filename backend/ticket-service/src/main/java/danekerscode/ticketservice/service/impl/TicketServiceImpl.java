@@ -8,6 +8,7 @@ import danekerscode.ticketservice.repository.TicketRepository;
 import danekerscode.ticketservice.service.TicketService;
 import danekerscode.ticketservice.utils.TicketEvent;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import static danekerscode.ticketservice.utils.AppConstants.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TicketServiceImpl implements TicketService {
 
     private final TicketRepository ticketRepository;
@@ -40,6 +42,7 @@ public class TicketServiceImpl implements TicketService {
                 TICKET_ROUTING_KEY,
                 new TicketEvent(ticket.getCode(), STATUS_BOUGHT, userId)
         );
+        log.info("ticked event was send userId: {} eventId: {}" , userId , eventId);
 
         return ticketRepository.save(ticket);
     }

@@ -10,7 +10,9 @@ import org.mapstruct.*;
 )
 public interface UserMapper {
 
+    @Mapping(target = "id", ignore = true)
     User toModel(UserDTO dto);
 
+    @Mapping(target = "id", ignore = true)
     User update(UserDTO dto , @MappingTarget User user);
 }

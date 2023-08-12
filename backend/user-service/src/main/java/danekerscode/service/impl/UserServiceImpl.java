@@ -6,8 +6,12 @@ import danekerscode.mapper.UserMapper;
 import danekerscode.model.User;
 import danekerscode.repository.UserRepository;
 import danekerscode.service.UserService;
+import danekerscode.utils.Notification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
+
+import static danekerscode.utils.AppConstants.*;
 
 @RequiredArgsConstructor
 @Service
@@ -15,6 +19,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final RabbitTemplate rabbitTemplate;
 
     @Override
     public User findById(Long id) {
@@ -25,13 +30,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void logout() {
-    // FIXME: 8/11/2023 security context holder clear
+        // FIXME: 8/11/2023 security context holder clear
     }
 
     @Override
     public User registration(UserDTO dto) {
-        return userRepository
-                .save(userMapper.toModel(dto));
+        var user = userRepository.save(userMapper.toModel(dto));
+        rabbitTemplate.convertAndSend(
+                EMAIL_EXCHANGE,
+                EMAIL_ROUTING_KEY,
+                new Notification("welcome to event ticket system", user.getEmail())
+        );
+        return user;
     }
 
     @Override
@@ -40,7 +50,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(UserDTO dto , Long userId) {
-       return userRepository.save(userMapper.update(dto, findById(userId)));
+    public User update(UserDTO dto, Long userId) {
+        return userRepository.save(userMapper.update(dto, findById(userId)));
     }
 }

@@ -15,7 +15,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String kcId; // keycloak id
 
     private String firstName;
     private String lastName;

@@ -17,7 +17,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping
+    @PostMapping("/")
     ResponseEntity<?> save(
             @RequestBody UserDTO dto
     ) {
