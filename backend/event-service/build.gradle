@@ -35,6 +35,8 @@ dependencies {
 
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.8'
 
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.1.0'
+
     runtimeOnly 'org.postgresql:postgresql'
 
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'

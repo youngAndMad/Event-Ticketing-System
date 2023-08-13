@@ -3,12 +3,6 @@ server:
   servlet:
     context-path: /api/v1/
 spring:
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8080/auth/realms/fs/
-          jwk-set-uri: http://localhost:8080/auth/realms/fs/protocol/openid-connect/certs
   cloud:
     openfeign:
       client:

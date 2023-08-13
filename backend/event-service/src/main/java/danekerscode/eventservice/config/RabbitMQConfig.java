@@ -27,15 +27,5 @@ public class RabbitMQConfig {
         return template;
     }
 
-    @Bean
-    public CommandLineRunner runner(
-            RabbitTemplate rabbitTemplate
-    ) {
-        return args -> {
-            rabbitTemplate.convertAndSend(EMAIL_EXCHANGE, EMAIL_ROUTING_KEY,
-                    new Notification("message", "destination"));
-        };
-    }
-
 
 }
