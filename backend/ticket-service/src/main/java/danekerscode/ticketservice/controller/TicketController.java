@@ -9,6 +9,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 @RequestMapping("ticket")
 public class TicketController {
 
