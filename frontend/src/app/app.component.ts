@@ -11,7 +11,7 @@ export class AppComponent  implements OnInit {
 
   ngOnInit(): void {
     console.log('fe')
-    this.http.get('http://localhost:8083/api/v1/ticket/2')
+    this.http.get('http://localhost:8090/api/v1/ticket/2')
       .subscribe(console.log);
   }
 }

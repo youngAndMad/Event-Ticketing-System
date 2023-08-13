@@ -5,11 +5,25 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwt-set-uri: http://localhost:8080/auth/realms/fs/protocol/openid-connect/certs
+          issuer-uri: http://localhost:8080/auth/realms/fs
+          jwk-set-uri: http://localhost:8080/auth/realms/fs/protocol/openid-connect/certs
   application:
     name: api-gateway
   cloud:
     gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:4200"
+            allowedHeaders: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - DELETE
+              - PATCH
+              - PUT
       discovery:
         locator:
           enabled: true
@@ -18,8 +32,6 @@ spring:
           uri: http://localhost:8082
           predicates:
             - Path=/api/v1/event/**
-#          filters:
-#            - TokenRelay=
         - id: user-service
           uri: http://localhost:8081
           predicates:

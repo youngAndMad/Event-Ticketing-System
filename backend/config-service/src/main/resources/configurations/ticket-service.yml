@@ -2,14 +2,13 @@ server:
   port: 8083
   servlet:
     context-path: /api/v1/
-
 spring:
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8080/auth/realms/fs/
-          jwt-set-uri: http://localhost:8080/auth/realms/fs/protocol/openid-connect/certs
+          jwk-set-uri: http://localhost:8080/auth/realms/fs/protocol/openid-connect/certs
   cloud:
     openfeign:
       client:
@@ -30,8 +29,6 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
-
-
 resilience4j:
   circuitbreaker:
    configs:
@@ -44,14 +41,12 @@ resilience4j:
        waitDurationInOpenState: 5s
        failureRateThreshold: 50
        eventConsumerBufferSize: 10
-
 eureka:
   instance:
     hostname: localhost
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
-
 management:
   endpoint:
     health:
@@ -63,3 +58,9 @@ management:
       exposure:
         include:
           - '*'
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+        security: DEBUG
