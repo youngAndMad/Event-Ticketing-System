@@ -10,6 +10,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { HomeComponent } from './components/home/home.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { EventComponent } from './components/event/event.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -17,6 +18,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     NotFoundComponent,
     HomeComponent,
     SidebarComponent,
+    EventComponent,
   ],
   imports: [
     BrowserModule,
