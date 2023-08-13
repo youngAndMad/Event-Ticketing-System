@@ -8,9 +8,10 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {KeycloakAngularModule, KeycloakService} from "keycloak-angular";
 import {initializeKeycloak} from "./init/keycloak-init.factory";
 import { ContentComponent } from './components/content/content.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
-  declarations: [AppComponent, ContentComponent],
+  declarations: [AppComponent, ContentComponent, ProfileComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
