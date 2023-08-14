@@ -3,10 +3,95 @@ volumes:
   postgres_data:
     driver: local
 services:
+
+  # database for user-service
+  postgres-user-service:
+    container_name: postgres-user-service
+    image: postgres:15
+    environment:
+      POSTGRES_DB: event_ticket_system_user_service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /data/postgres
+    volumes:
+      - ./configuration/postgres-user-service:/data/postgres
+    expose:
+      - "5431"
+    ports:
+      - "5431:5431"
+    command: -p 5431
+    restart: always
+
+  postgres-event-service:
+    container_name: postgres-event-service
+    image: postgres:15
+    environment:
+      POSTGRES_DB: event_ticket_system_event_service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /data/postgres
+    volumes:
+      - ./configuration/postgres-event-service:/data/postgres
+    expose:
+      - "5433"
+    ports:
+      - "5433:5433"
+    command: -p 5433
+    restart: always
+
+  postgres-ticket-service:
+    container_name: postgres-ticket-service
+    image: postgres:15
+    environment:
+      POSTGRES_DB: event_ticket_system_ticket_service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /data/postgres
+    volumes:
+      - ./configuration/postgres-ticket-service:/data/postgres
+    expose:
+      - "5434"
+    ports:
+      - "5434:5434"
+    command: -p 5434
+    restart: always
+
+  # eureka discovery server
+  discovery-service:
+    container_name: discovery-service
+    image: daneker/discovery-service:latest
+    ports:
+      - "8761:8761"
+    networks:
+      - test
+  # spring cloud config server
   config-service:
     container_name: config-service
-    image: config-service:0.0.1-SNAPSHOT
-  # keycloak and database for keycloak
+    image: daneker/config-service:latest
+    depends_on:
+      - discovery-service
+    ports:
+      - "8888:8888"
+    networks:
+      - test
+
+  # spring cloud gateway
+  api-gateway:
+    container_name: api-gateway
+    image: daneker/api-gateway:latest
+    depends_on:
+      - config-service
+      - discovery-service
+      - keycloak
+
+  user-service:
+    container_name: user-service
+    image: daneker/user-service:latest
+    depends_on:
+      - postgres-user-service
+      - kafka
+
+  # db for keycloak
   postgres:
     image: postgres:9.6
     container_name: kc_db
@@ -27,8 +112,8 @@ services:
       DB_USER: keycloak
       DB_SCHEMA: public
       DB_PASSWORD: password
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: password
+#      KEYCLOAK_USER: admin
+#      KEYCLOAK_PASSWORD: password
     ports:
       - "8080:8080"
     volumes:
@@ -37,52 +122,51 @@ services:
       - postgres
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    networks:
-      - broker-kafka
+    image: confluentinc/cp-zookeeper:7.0.1
+    container_name: zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+
   kafka:
-    image: confluentinc/cp-kafka:latest
-    networks:
-      - broker-kafka
-    depends_on:
-      - zookeeper
+    image: confluentinc/cp-kafka:7.0.1
+    container_name: kafka
     ports:
       - "9092:9092"
+    depends_on:
+      - zookeeper
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-  # ui for kafka topics and messages
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+  # # ui for kafka topics and messages
   kafdrop:
-    image: obsidiandynamics/kafdrop:latest
-    networks:
-      - broker-kafka
-    depends_on:
-      - kafka
-    ports:
-      - "19000:9000"
-    environment:
-      KAFKA_BROKERCONNECT: kafka:29092
-  elasticsearch:
-    image: elasticsearch:7.9.2
-    ports:
-      - "9200:9200"
-    environment:
-      - discovery.type=single-node
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-  kibana:
-    image: kibana:7.9.2
-    ports:
-    - "5601:5601"
+     image: obsidiandynamics/kafdrop:latest
+     depends_on:
+       - kafka
+     ports:
+       - "19000:9000"
+     environment:
+       KAFKA_BROKERCONNECT: kafka:29092
+  # elasticsearch:
+  #   image: elasticsearch:7.9.2
+  #   ports:
+  #     - "9200:9200"
+  #   environment:
+  #     - discovery.type=single-node
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  # kibana:
+  #   image: kibana:7.9.2
+  #   ports:
+  #   - "5601:5601"
+  # networks:
+  #   broker-kafka:
 networks:
-  broker-kafka:
-    driver: bridge
+  test:

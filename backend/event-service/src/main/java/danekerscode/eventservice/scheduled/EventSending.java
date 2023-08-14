@@ -1,9 +1,7 @@
 package danekerscode.eventservice.scheduled;
 
 import danekerscode.eventservice.repository.EventRepository;
-import danekerscode.eventservice.utils.Notification;
 import lombok.RequiredArgsConstructor;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;

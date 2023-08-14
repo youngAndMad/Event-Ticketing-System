@@ -12,7 +12,7 @@ spring:
   datasource:
     password: postgres
     username: postgres
-    url: jdbc:postgresql://localhost:5432/event_ticket_system_event_service
+    url: jdbc:postgresql://host.docker.internal:5433/event_ticket_system_event_service
     driver-class-name: org.postgresql.Driver
   jpa:
     open-in-view: true
@@ -24,10 +24,4 @@ eureka:
     hostname: localhost
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
-springdoc:
-  swagger-ui:
-    path: /api-docs  # Customize the Swagger UI path
-  api-docs:
-    enabled: true
-    path: /api-docs  # Customize the API documentation path
+      defaultZone: http://host.docker.internal:8761/

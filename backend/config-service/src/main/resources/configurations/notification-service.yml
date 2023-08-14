@@ -9,7 +9,7 @@ spring:
           json:
             trusted:
               packages: "*"
-      bootstrap-servers: localhost:9092
+      bootstrap-servers: host.docker.internal:29092
   mail:
     host: smtp.gmail.com
     port: 587
@@ -23,9 +23,5 @@ spring:
 
   application:
     name: notification-service
-  rabbit:
-    host: localhost
-    username: user
-    password: password
 server:
   port: 8118

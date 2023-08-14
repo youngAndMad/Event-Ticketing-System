@@ -3,6 +3,7 @@ package danekerscode.eventservice.mapper;
 import danekerscode.eventservice.dto.AddressDTO;
 import danekerscode.eventservice.model.Address;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
@@ -11,5 +12,6 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
 )
 public interface AddressMapper {
+    @Mapping(target = "id" , ignore = true)
     Address toModel(AddressDTO dto);
 }

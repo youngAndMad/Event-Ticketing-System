@@ -7,7 +7,7 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      bootstrap-servers: localhost:9092
+      bootstrap-servers: host.docker.internal:29092
       properties:
         spring:
           json:
@@ -23,13 +23,13 @@ spring:
           json:
             trusted:
               packages: "*"
-      bootstrap-servers: localhost:9092
+      bootstrap-servers: host.docker.internal:29092
   application:
     name: user-service
   datasource:
     password: postgres
     username: postgres
-    url: jdbc:postgresql://localhost:5432/event_ticket_system_user_service
+    url: jdbc:postgresql://host.docker.internal:5431/event_ticket_system_user_service
     driver-class-name: org.postgresql.Driver
   jpa:
     open-in-view: true
@@ -41,7 +41,7 @@ eureka:
     hostname: localhost
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://host.docker.internal:8761/
 logging:
   level:
     org:

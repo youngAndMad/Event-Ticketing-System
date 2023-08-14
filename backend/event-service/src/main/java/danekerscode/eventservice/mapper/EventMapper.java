@@ -14,6 +14,7 @@ import org.mapstruct.*;
 )
 public interface EventMapper {
 
+    @Mapping(target = "id" , ignore = true)
     Event toModel(EventDTO dto);
 
     @Mapping(target = "eventId" , expression = "java(event.getId())")
