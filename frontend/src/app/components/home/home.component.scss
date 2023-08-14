@@ -1,15 +1,15 @@
 .wrapper {
   height: 100vh;
-  /* This part is important for centering */
   display: grid;
   place-items: center;
 }
 
 .typing-demo {
-  width: 22ch;
-  animation: typing 5s steps(22) infinite, blink 5s step-end infinite alternate;
+  width: 30ch;
+  animation: typing 15s steps(40) infinite, blink 10s step-end infinite alternate;
   white-space: nowrap;
   overflow: hidden;
+  text-transform: uppercase;
   border-right: 3px solid;
   font-family: monospace;
   font-size: 2em;
@@ -20,7 +20,7 @@
     width: 0;
   }
   to {
-    width: 22ch; /* Adjust this value to match the width of your text */
+    width: 90ch; /* Adjust this value to match the width of your text */
   }
 }
 

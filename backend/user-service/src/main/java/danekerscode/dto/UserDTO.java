@@ -8,7 +8,7 @@ public record UserDTO(
         @NotBlank String firstName,
         @NotBlank String lastName,
         @Email String email,
-        @Size(min = 8)
+//        @Size(min = 8)
         String password
 ) {
 }

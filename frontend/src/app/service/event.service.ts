@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class EventService {
-  private EVENT_URL: string = `${BASE_API}/event/`;
+  private EVENT_URL: string = `${BASE_API}event/`;
   private http = inject(HttpClient);
 
   findById(id: number): Observable<any> {

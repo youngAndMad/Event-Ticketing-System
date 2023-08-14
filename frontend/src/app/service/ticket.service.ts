@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class TicketService {
-  private TICKET_URL: string = `${BASE_API}/ticket/`;
+  private TICKET_URL: string = `${BASE_API}ticket/`;
   private http = inject(HttpClient);
 
   bought(userId: number, eventId: number): Observable<any> {

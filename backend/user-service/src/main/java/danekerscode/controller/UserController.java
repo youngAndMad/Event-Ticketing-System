@@ -16,6 +16,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin
 public class UserController {
 
     private final UserService userService;
@@ -25,6 +26,7 @@ public class UserController {
             @RequestBody @Valid UserDTO dto,
             BindingResult br
     ) {
+        System.out.println(dto);
         validateRequest(br);
         return ResponseEntity
                 .status(201)

@@ -13,6 +13,7 @@ import static org.springframework.http.HttpStatus.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("event")
+@CrossOrigin(origins = "*")
 public class EventController {
 
     private final EventService eventService;

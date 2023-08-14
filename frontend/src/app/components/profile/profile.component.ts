@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { EventService } from 'src/app/service/event.service';
+import { TicketService } from 'src/app/service/ticket.service';
 
 @Component({
   selector: 'app-profile',
@@ -6,5 +8,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-  ngOnInit(): void {}
+  private eventService = inject(TicketService);
+
+  ngOnInit() {
+    this.eventService.findById(2).subscribe(console.log);
+  }
 }

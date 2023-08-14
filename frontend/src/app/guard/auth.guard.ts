@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { UserService } from './../service/user.service';
+import { Injectable, inject } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
@@ -18,6 +19,8 @@ export class AuthGuard extends KeycloakAuthGuard {
     super(router, keycloak);
   }
 
+  private userService = inject(UserService);
+
   async isAccessAllowed(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
@@ -27,8 +30,17 @@ export class AuthGuard extends KeycloakAuthGuard {
         redirectUri: window.location.origin + state.url,
       });
     }
-    const userInfo = this.keycloak.getKeycloakInstance().idTokenParsed;
-    localStorage.setItem('user', JSON.stringify(userInfo));
+    if (!localStorage.getItem('user') && this.authenticated) {
+      const keycloakUser = this.keycloak.getKeycloakInstance().idTokenParsed!;
+      let user = {
+        email: keycloakUser['email'],
+        firstName: keycloakUser['given_name'],
+        lastName: keycloakUser['family_name'],
+      };
+      this.userService.register(user).subscribe((res) => {
+        localStorage.setItem('user', JSON.stringify(res));
+      });
+    }
 
     return this.authenticated;
   }
