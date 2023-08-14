@@ -7,22 +7,6 @@ spring:
     date-format: "yyyy-MM-dd"
     serialization:
       write_dates_as_timestamps: false
-  data:
-    elasticsearch:
-      schema: http
-      host: localhost
-      port: 9200
-  kafka:
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      bootstrap-servers: localhost:9092
-      properties:
-        spring:
-          json:
-            add:
-              type:
-                headers: false
   application:
     name: event-service
   datasource:
