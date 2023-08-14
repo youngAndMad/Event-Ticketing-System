@@ -5,29 +5,27 @@ import danekerscode.utils.Notification;
 import danekerscode.utils.TicketEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-import static danekerscode.utils.AppConstants.*;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class DefaultRabbitListener {
+public class DefaultKafkaListener {
 
-    private final RabbitTemplate rabbitTemplate;
     private final UserService userService;
+    private final KafkaTemplate<String,Notification> kafkaTemplate;
 
-    @RabbitListener(queues = TICKET_QUEUE)
+    @KafkaListener(topics = "ticket_topic" , groupId = "groupId")
     void listen(
             TicketEvent ticketEvent
     ) {
         log.info("new ticket event {}" , ticketEvent);
         var user = userService.findById(ticketEvent.userId());
-        rabbitTemplate.convertAndSend(
-                EMAIL_EXCHANGE,
-                EMAIL_ROUTING_KEY,
+        kafkaTemplate.send(
+                "email_topic",
                 new Notification(
                         "Ticket code: %s , status: %s".formatted(ticketEvent.code(), ticketEvent.status()),
                         user.getEmail()

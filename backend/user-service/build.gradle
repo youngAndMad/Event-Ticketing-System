@@ -31,7 +31,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
-    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    implementation 'org.springframework.kafka:spring-kafka'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.1.0'
 
     testImplementation 'org.testng:testng:7.7.0'
@@ -40,8 +40,7 @@ dependencies {
     testImplementation "org.testcontainers:testcontainers:1.18.3"
     testImplementation 'org.testcontainers:junit-jupiter'
 
-    implementation platform('org.testcontainers:testcontainers-bom:1.18.3')
-    testImplementation 'org.testcontainers:rabbitmq:1.18.3'
+
 
 
     runtimeOnly 'org.postgresql:postgresql'

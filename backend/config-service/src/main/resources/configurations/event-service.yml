@@ -12,10 +12,17 @@ spring:
       schema: http
       host: localhost
       port: 9200
-  rabbit:
-    host: localhost
-    username: user
-    password: password
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      bootstrap-servers: localhost:9092
+      properties:
+        spring:
+          json:
+            add:
+              type:
+                headers: false
   application:
     name: event-service
   datasource:

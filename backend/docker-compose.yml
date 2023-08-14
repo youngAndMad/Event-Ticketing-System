@@ -1,4 +1,7 @@
 version: '3'
+volumes:
+  postgres_data:
+    driver: local
 services:
   rabbitmq:
     image: rabbitmq:3.10.7-management
@@ -8,6 +11,7 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
+
 
 
 

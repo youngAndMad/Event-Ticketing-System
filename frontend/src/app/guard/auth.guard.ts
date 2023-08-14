@@ -37,7 +37,9 @@ export class AuthGuard extends KeycloakAuthGuard {
         firstName: keycloakUser['given_name'],
         lastName: keycloakUser['family_name'],
       };
+      console.log('sending request to registration');
       this.userService.register(user).subscribe((res) => {
+        console.log('response from registration', res);
         localStorage.setItem('user', JSON.stringify(res));
       });
     }

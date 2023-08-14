@@ -12,13 +12,12 @@ import danekerscode.ticketservice.utils.TicketEvent;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static danekerscode.ticketservice.utils.AppConstants.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +27,7 @@ public class TicketServiceImpl implements TicketService {
     private final TicketRepository ticketRepository;
     private final EventClient eventClient;
     private final UserClient userClient;
-    private final RabbitTemplate rabbitTemplate;
+    private final KafkaTemplate<String, TicketEvent> kafkaTemplate;
 
     @Override
     public List<Ticket> findUserTickets(
@@ -43,7 +42,7 @@ public class TicketServiceImpl implements TicketService {
         var checkUser = userClient.findById(userId);
         var ticket = new Ticket(eventId, userId);
 
-        sendEvent(ticket, STATUS_BOUGHT);
+        sendEvent(ticket, "ticket bought successfully");
 
         return ticketRepository.save(ticket);
     }
@@ -60,7 +59,7 @@ public class TicketServiceImpl implements TicketService {
             throw new TicketReturnDateExpiredException();
         }
 
-        sendEvent(ticket, STATUS_RETURNED);
+        sendEvent(ticket, "ticket return successfully");
 
         ticketRepository.deleteById(id);
         return true;
@@ -68,9 +67,8 @@ public class TicketServiceImpl implements TicketService {
 
     private void sendEvent(Ticket ticket, String status) {
         log.info("ticked event was send userId: {} eventId: {} , status {}", ticket.getUserId(), ticket.getEventId(), status);
-        rabbitTemplate.convertAndSend(
-                TICKET_EXCHANGE,
-                TICKET_ROUTING_KEY,
+        kafkaTemplate.send(
+                "ticket_topic",
                 new TicketEvent(ticket.getCode(), status, ticket.getEventId())
         );
     }

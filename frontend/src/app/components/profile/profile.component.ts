@@ -11,6 +11,6 @@ export class ProfileComponent implements OnInit {
   private eventService = inject(TicketService);
 
   ngOnInit() {
-    this.eventService.findById(2).subscribe(console.log);
+    // this.eventService.findById(2).subscribe(console.log);
   }
 }

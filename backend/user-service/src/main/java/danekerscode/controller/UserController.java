@@ -4,6 +4,7 @@ import danekerscode.dto.UserDTO;
 import danekerscode.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -26,7 +28,7 @@ public class UserController {
             @RequestBody @Valid UserDTO dto,
             BindingResult br
     ) {
-        System.out.println(dto);
+        log.info("new registration request {}" , dto);
         validateRequest(br);
         return ResponseEntity
                 .status(201)
