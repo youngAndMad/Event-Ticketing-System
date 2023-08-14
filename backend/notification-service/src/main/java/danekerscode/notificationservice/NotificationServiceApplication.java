@@ -16,17 +16,5 @@ public class NotificationServiceApplication {
         SpringApplication.run(NotificationServiceApplication.class, args);
     }
 
-    @Bean
-    public CommandLineRunner runner(
-            MailService mailService
-    ){
-        return args -> {
-            System.out.println("sending");
-            mailService.send(new Notification(
-                    "test@gmail.com"
-                    ,"love you"));
-        };
-    }
-
 
 }

@@ -29,11 +29,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void logout() {
-        // FIXME: 8/11/2023 security context holder clear
-    }
-
-    @Override
     public User registration(UserDTO dto) {
         var optional = userRepository.findUserByEmail(dto.email());
 

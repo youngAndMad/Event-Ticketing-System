@@ -97,6 +97,21 @@ paths:
             '*/*':
               schema:
                 type: object
+    delete:
+      tags:
+        - user-controller
+      operationId: delete user account
+      summary: delete user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: NO CONTENT
     put:
       tags:
         - user-controller

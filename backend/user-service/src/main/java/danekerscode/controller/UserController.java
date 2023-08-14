@@ -55,4 +55,12 @@ public class UserController {
                 .ok(userService.update(dto,id));
     }
 
+    @DeleteMapping("{id}")
+    @ResponseStatus(NO_CONTENT)
+    void deleteAccount(
+            @PathVariable Long id
+    ){
+        userService.delete(id);
+    }
+
 }
