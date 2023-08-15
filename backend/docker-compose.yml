@@ -22,6 +22,7 @@ services:
     command: -p 5431
     restart: always
 
+  # database for event-service
   postgres-event-service:
     container_name: postgres-event-service
     image: postgres:15
@@ -33,12 +34,13 @@ services:
     volumes:
       - ./configuration/postgres-event-service:/data/postgres
     expose:
-      - "5433"
+        - "5433"
     ports:
       - "5433:5433"
     command: -p 5433
     restart: always
 
+  # database for ticket-service
   postgres-ticket-service:
     container_name: postgres-ticket-service
     image: postgres:15
@@ -62,8 +64,7 @@ services:
     image: daneker/discovery-service:latest
     ports:
       - "8761:8761"
-    networks:
-      - test
+
   # spring cloud config server
   config-service:
     container_name: config-service
@@ -72,26 +73,59 @@ services:
       - discovery-service
     ports:
       - "8888:8888"
-    networks:
-      - test
 
   # spring cloud gateway
   api-gateway:
     container_name: api-gateway
     image: daneker/api-gateway:latest
     depends_on:
-      - config-service
-      - discovery-service
-      - keycloak
+     - config-service
+     - discovery-service
+     - keycloak
+    ports:
+      - "8090:8090"
 
   user-service:
     container_name: user-service
     image: daneker/user-service:latest
+    ports:
+      - "8081:8081"
     depends_on:
       - postgres-user-service
+      - api-gateway
       - kafka
 
-  # db for keycloak
+  event-service:
+    container_name: event-service
+    image: daneker/event-service:latest
+    ports:
+      - "8082:8082"
+    depends_on:
+      - config-service
+      - elasticsearch
+      - api-gateway
+
+
+  notification-service:
+    container_name: notification-service
+    image: daneker/notification-service:latest
+    ports:
+      - "8118:8118"
+    depends_on:
+      - kafka
+      - config-service
+
+  ticket-service:
+    container_name: ticket-service
+    image: daneker/ticket-service:latest
+    ports:
+      - "8083:8083"
+    depends_on:
+      - api-gateway
+      - config-service
+      - kafka
+
+  #database for keycloak
   postgres:
     image: postgres:9.6
     container_name: kc_db
@@ -100,7 +134,7 @@ services:
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: password
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+        - postgres_data:/var/lib/postgresql/data
   keycloak:
     build:
       dockerfile: ./keycloak.dockerfile
@@ -112,12 +146,12 @@ services:
       DB_USER: keycloak
       DB_SCHEMA: public
       DB_PASSWORD: password
-#      KEYCLOAK_USER: admin
-#      KEYCLOAK_PASSWORD: password
+      #      KEYCLOAK_USER: admin
+      #      KEYCLOAK_PASSWORD: password
     ports:
       - "8080:8080"
     volumes:
-      - ./configuration/themes/demo:/opt/jboss/keycloak/themes/demo
+        - ./configuration/themes/demo:/opt/jboss/keycloak/themes/demo
     depends_on:
       - postgres
 
@@ -136,37 +170,22 @@ services:
     depends_on:
       - zookeeper
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-  # # ui for kafka topics and messages
-  kafdrop:
-     image: obsidiandynamics/kafdrop:latest
-     depends_on:
-       - kafka
-     ports:
-       - "19000:9000"
-     environment:
-       KAFKA_BROKERCONNECT: kafka:29092
-  # elasticsearch:
-  #   image: elasticsearch:7.9.2
-  #   ports:
-  #     - "9200:9200"
-  #   environment:
-  #     - discovery.type=single-node
-  #   ulimits:
-  #     memlock:
-  #       soft: -1
-  #       hard: -1
-  # kibana:
-  #   image: kibana:7.9.2
-  #   ports:
-  #   - "5601:5601"
-  # networks:
-  #   broker-kafka:
-networks:
-  test:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_INTERNAL://kafka:29092,LISTENER_EXTERNAL://localhost:9292
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_INTERNAL:PLAINTEXT,LISTENER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_INTERNAL
+
+  elasticsearch:
+    image: elasticsearch:7.9.2
+    ports:
+      - "9200:9200"
+    environment:
+     - discovery.type=single-node
+    ulimits:
+       memlock:
+         soft: -1
+         hard: -1
+  kibana:
+    image: kibana:7.9.2
+    ports:
+     - "5601:5601"

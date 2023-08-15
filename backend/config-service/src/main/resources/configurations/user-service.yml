@@ -7,7 +7,7 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      bootstrap-servers: host.docker.internal:29092
+      bootstrap-servers: http://kafka:29092
       properties:
         spring:
           json:
@@ -23,7 +23,7 @@ spring:
           json:
             trusted:
               packages: "*"
-      bootstrap-servers: host.docker.internal:29092
+      bootstrap-servers: http://kafka:29092
   application:
     name: user-service
   datasource:

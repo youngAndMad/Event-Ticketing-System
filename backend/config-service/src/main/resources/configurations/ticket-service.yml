@@ -7,7 +7,7 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      bootstrap-servers: host.docker.internal:29092
+      bootstrap-servers: http://kafka:29092
       properties:
         spring:
           json:
@@ -47,11 +47,9 @@ resilience4j:
         failureRateThreshold: 50
         eventConsumerBufferSize: 10
 eureka:
-  instance:
-    hostname: localhost
   client:
     service-url:
-      defaultZone: http://host.docker.internal:8761/
+      defaultZone: http://host.docker.internal:8761/eureka
 management:
   endpoint:
     health:

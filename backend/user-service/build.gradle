@@ -12,7 +12,6 @@ java {
 }
 
 
-
 ext {
     set('springCloudVersion', "2022.0.1")
     set('testcontainersVersion', "1.18.0")

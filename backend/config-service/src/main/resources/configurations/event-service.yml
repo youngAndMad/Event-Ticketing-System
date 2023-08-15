@@ -20,8 +20,6 @@ spring:
     hibernate:
       ddl-auto: update
 eureka:
-  instance:
-    hostname: localhost
   client:
     service-url:
-      defaultZone: http://host.docker.internal:8761/
+      defaultZone: http://host.docker.internal:8761/eureka
